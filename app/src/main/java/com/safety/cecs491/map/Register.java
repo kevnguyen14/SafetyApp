@@ -49,7 +49,7 @@ public class Register extends AppCompatActivity{
     Button bRegister;
     EditText etFirstName, etLastName, etUsername, etPassword, etConfirmPassword;
     RequestQueue requestQueue;
-    String insertUrl = "http://safetytrack.netai.net/insertUser.php";
+    String insertUrl = "http://cecs491a.comlu.com/insertUser.php";
     ProgressDialog progressDialog;
 
     @Override

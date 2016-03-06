@@ -43,7 +43,7 @@ public class Login extends AppCompatActivity {
     TextView tvUsername;
     UserLocalStore userLocalStore;
     RequestQueue requestQueue;
-    String showUrl = "http://safetytrack.netai.net/showUsers.php";
+    String showUrl = "http://cecs491a.comlu.com/showUsers.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class Login extends AppCompatActivity {
                                 JSONObject user = users.getJSONObject(i);
                                 String userName = user.getString("userName");
                                 String password = user.getString("password");
-                                if(etUsername.getText().toString().equalsIgnoreCase(userName)  && etPassword.getText().toString().equalsIgnoreCase(password)) {
+                                if(etUsername.getText().toString().equals(userName)  && etPassword.getText().toString().equals(password)) {
                                     User u = new User(userName, password);
                                     logUserIn(u);
                                 }

@@ -1,6 +1,7 @@
 package com.safety.cecs491.map;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,7 +25,13 @@ import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,18 +43,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity{
 
     private GoogleMap mMap;
     RequestQueue requestQueue;
-
+    ProgressDialog progressDialog;
     RadioButton rbPing, rbSettings, rbLogout, rbView, rbRefresh;
+    RadioButton rbNormal, rbSatellite, rbHybrid, rbTerrain;
     UserLocalStore userLocalStore;
-    String details;
-    int level;
+    String insertPing = "http://cecs491a.comlu.com/insertPing.php";
+    String showPing = "http://cecs491a.comlu.com/showPings.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +72,21 @@ public class MapsActivity extends AppCompatActivity{
         rbSettings = (RadioButton) findViewById(R.id.rbSettings);
         rbLogout = (RadioButton) findViewById(R.id.rbLogout);
         rbView = (RadioButton) findViewById(R.id.rbView);
+        rbView.toggle();
         rbRefresh = (RadioButton) findViewById(R.id.rbRefresh);
+        rbNormal = (RadioButton) findViewById(R.id.rbNormal);
+        rbNormal.toggle();
+        rbHybrid = (RadioButton) findViewById(R.id.rbHybrid);
+        rbSatellite = (RadioButton) findViewById(R.id.rbSatellite);
+        rbTerrain = (RadioButton) findViewById(R.id.rbTerrain);
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         userLocalStore = new UserLocalStore(this);
+        loadPings();
 
+        /**
+         * Listener for view
+         */
         rbView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +94,9 @@ public class MapsActivity extends AppCompatActivity{
             }
         });
 
+        /**
+         * Listener for settings
+         */
         rbSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,13 +104,20 @@ public class MapsActivity extends AppCompatActivity{
             }
         });
 
+        /**
+         * Listener for Refresh
+         */
         rbRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 removeListener();
+                loadPings();
             }
         });
 
+        /**
+         * Listener for logout
+         */
         rbLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,10 +128,53 @@ public class MapsActivity extends AppCompatActivity{
             }
         });
 
+        /**
+         * Listener for ping
+         */
         rbPing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ping();
+            }
+        });
+
+        /**
+         * Listener for normal view
+         */
+        rbNormal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            }
+        });
+
+        /**
+         * Listener for satellite view
+         */
+        rbSatellite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            }
+        });
+
+        /**
+         * Listener for hybrid view
+         */
+        rbHybrid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            }
+        });
+
+        /**
+         * Listener for terrain view
+         */
+        rbTerrain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
             }
         });
     }
@@ -135,6 +212,9 @@ public class MapsActivity extends AppCompatActivity{
                 layout.setOrientation(LinearLayout.VERTICAL);
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MapsActivity.this);
                 dialogBuilder.setTitle("Describe and Rate the Danger");
+                TextView tv = new TextView(context);
+                tv.setText("\nDescribe the danger:");
+                layout.addView(tv);
                 final EditText etDetails = new EditText(context);
                 etDetails.setSingleLine(false);
                 layout.addView(etDetails);
@@ -179,8 +259,10 @@ public class MapsActivity extends AppCompatActivity{
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 break;
         }
-        markerOptions.title(details + " " + currentDateTime + " " + userLocalStore.getLoggedInUser().userName);
+        String user = userLocalStore.getLoggedInUser().userName;
+        markerOptions.title(details + " " + currentDateTime + " " + user);
         mMap.addMarker(markerOptions);
+        storePing(position, details, level, user, currentDateTime);
     }
     private void setUpMap() {
         SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
@@ -193,6 +275,85 @@ public class MapsActivity extends AppCompatActivity{
 
     private boolean authenticate() {
         return userLocalStore.getUserLoggedIn();
+    }
+
+    private void storePing(final LatLng position, final String details, final int level, final String user, final String currentDateTime) {
+        StringRequest request = new StringRequest(Request.Method.POST, insertPing, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("lat", Double.toString(position.latitude));
+                parameters.put("lng", Double.toString(position.longitude));
+                parameters.put("userName", user);
+                parameters.put("time", currentDateTime);
+                parameters.put("details", details);
+                parameters.put("level", Integer.toString(level));
+                return parameters;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    private void loadPings() {
+        mMap.clear();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                showPing, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray pings = response.getJSONArray("pings");
+                    for (int i = 0; i < pings.length(); i++) {
+                        JSONObject ping = pings.getJSONObject(i);
+                        String latTemp = ping.getString("lat");
+                        String lngTemp = ping.getString("lng");
+                        String user = ping.getString("userName");
+                        String currentDateTime = ping.getString("time");
+                        String details = ping.getString("details");
+                        String levelTemp = ping.getString("level");
+                        double lat = Double.parseDouble(latTemp);
+                        double lng = Double.parseDouble(lngTemp);
+                        int level = Integer.parseInt(levelTemp);
+                        LatLng position = new LatLng(lat, lng);
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(position);
+                        switch (level) {
+                            case 1: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                                break;
+                            case 2: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                                break;
+                            case 3: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                                break;
+                            case 4: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                                break;
+                            default:
+                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                                break;
+                        }
+                        markerOptions.title(details + " " + currentDateTime + " " + user);
+                        mMap.addMarker(markerOptions);
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
     }
 
 

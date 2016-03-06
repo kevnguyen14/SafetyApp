@@ -89,4 +89,68 @@
             android:gravity="center_horizontal|center_vertical"
             android:layout_weight="1" />
     </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/radio_group_list_selector_2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:background="#80000000"
+        android:padding="4dp" >
+
+        <RadioButton
+            android:id="@+id/rbNormal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Normal"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/VerticalLine5"
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:background="#aaa" />
+
+        <RadioButton
+            android:id="@+id/rbHybrid"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Hybrid"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/VerticalLine6"
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:background="#aaa" />
+
+        <RadioButton
+            android:id="@+id/rbSatellite"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Satellite"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/VerticalLine7"
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:background="#aaa" />
+
+        <RadioButton
+            android:id="@+id/rbTerrain"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Terrain"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_weight="1" />
+    </RadioGroup>
 </FrameLayout>
