@@ -242,7 +242,7 @@ public class MapsActivity extends FragmentActivity{
     }
 
     private void drawMarker(LatLng position, String details, int level) {
-        SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
+        SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy hh:mma");
         String currentDateTime = date.format(new Date());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(position);
