@@ -19,7 +19,7 @@ public class AdminLocalStore {
         SharedPreferences.Editor spEditor = adminLocalDatabase.edit();
         spEditor.putString("first name", admin.firstName);
         spEditor.putString("last name", admin.lastName);
-        spEditor.putString("email", admin.email);
+        spEditor.putString("username", admin.userName);
         spEditor.putString("password", admin.password);
         spEditor.putString("key", admin.key);
         spEditor.commit();
@@ -28,10 +28,10 @@ public class AdminLocalStore {
     public Admin getLoggedInAdmin() {
         String firstName = adminLocalDatabase.getString("first name", "");
         String lastName = adminLocalDatabase.getString("last name", "");
-        String email = adminLocalDatabase.getString("email", "");
+        String userName = adminLocalDatabase.getString("userName", "");
         String password = adminLocalDatabase.getString("password", "");
 
-        Admin storedadmin = new Admin(firstName, lastName, email, password);
+        Admin storedadmin = new Admin(firstName, lastName, userName, password);
         return storedadmin;
     }
 

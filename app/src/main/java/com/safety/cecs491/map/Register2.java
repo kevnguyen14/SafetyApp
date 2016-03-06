@@ -13,7 +13,7 @@ import android.widget.EditText;
 public class Register2 extends AppCompatActivity implements View.OnClickListener{
 
     Button bRegister;
-    EditText etFirstName, etLastName, etEmail, etPassword, etConfirmPassword, etAdminKey;
+    EditText etFirstName, etLastName, etUsername, etPassword, etConfirmPassword, etAdminKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class Register2 extends AppCompatActivity implements View.OnClickListener
 
         etFirstName = (EditText) findViewById(R.id.etFirstName);
         etLastName = (EditText) findViewById(R.id.etLastName);
-        etEmail = (EditText) findViewById(R.id.etEmail);
+        etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
         etAdminKey = (EditText) findViewById(R.id.etAdminKey);

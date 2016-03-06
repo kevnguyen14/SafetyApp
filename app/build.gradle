@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.safety.cecs491.map"
@@ -25,4 +26,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.google.android.gms:play-services:8.1.0'
     compile 'com.android.support:design:23.1.0'
+    compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    compile 'com.mcxiaoke.volley:library:1.0.18'
 }

@@ -28,7 +28,7 @@ import java.util.Date;
 public class MapsActivity2 extends AppCompatActivity implements View.OnClickListener{
 
     private GoogleMap mMap;
-    RadioButton rbPing, rbSettings, rbLogout, rbRemovePing;
+    RadioButton rbPing, rbSettings, rbLogout, rbRemove;
     AdminLocalStore adminLocalStore;
 
     @Override
@@ -37,11 +37,11 @@ public class MapsActivity2 extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
         rbPing = (RadioButton) findViewById(R.id.rbPing);
-        rbRemovePing = (RadioButton) findViewById(R.id.rbRemovePing);
+        rbRemove = (RadioButton) findViewById(R.id.rbRemove);
         rbSettings = (RadioButton) findViewById(R.id.rbSettings);
         rbLogout = (RadioButton) findViewById(R.id.rbLogout);
         rbPing.setOnClickListener(this);
-        rbRemovePing.setOnClickListener(this);
+        rbRemove.setOnClickListener(this);
         rbSettings.setOnClickListener(this);
         rbLogout.setOnClickListener(this);
 
@@ -92,7 +92,7 @@ public class MapsActivity2 extends AppCompatActivity implements View.OnClickList
                 //startActivity(new Intent(this, MapsActivity.class));
                 break;
 
-            case R.id.rbRemovePing:
+            case R.id.rbRemove:
                 //what happens when remove ping button is clicked
                 //startActivity(new Intent(this, MapsActivity.class));
                 break;
