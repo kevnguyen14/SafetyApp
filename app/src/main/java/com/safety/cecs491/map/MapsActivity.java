@@ -52,7 +52,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapsActivity extends AppCompatActivity{
+public class MapsActivity extends FragmentActivity{
 
     private GoogleMap mMap;
     RequestQueue requestQueue;
