@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -220,7 +221,7 @@ public class MapsActivity extends FragmentActivity{
                 layout.addView(etDetails);
                 final NumberPicker rbLevel = new NumberPicker(context);
                 rbLevel.setMinValue(1);
-                rbLevel.setMaxValue(5);
+                rbLevel.setMaxValue(3);
                 layout.addView(rbLevel);
                 dialogBuilder.setView(layout);
                 dialogBuilder.setPositiveButton("Ping", new DialogInterface.OnClickListener() {
@@ -247,13 +248,10 @@ public class MapsActivity extends FragmentActivity{
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(position);
         switch (level) {
-            case 1: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+            case 1: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
                 break;
-            case 2: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                break;
-            case 3: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                break;
-            case 4: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            case 2:
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                 break;
             default:
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
@@ -327,13 +325,9 @@ public class MapsActivity extends FragmentActivity{
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(position);
                         switch (level) {
-                            case 1: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                            case 1: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
                                 break;
-                            case 2: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                                break;
-                            case 3: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                                break;
-                            case 4: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                            case 2: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                                 break;
                             default:
                                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
