@@ -17,12 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal"
-        android:background="#80000000"
+        android:background="#000000"
         android:padding="4dp" >
 
         <RadioButton
             android:id="@+id/rbPing"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
@@ -38,7 +39,8 @@
 
         <RadioButton
             android:id="@+id/rbView"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
@@ -54,7 +56,8 @@
 
         <RadioButton
             android:id="@+id/rbSettings"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
@@ -70,7 +73,8 @@
 
         <RadioButton
             android:id="@+id/rbRefresh"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
@@ -86,7 +90,8 @@
 
         <RadioButton
             android:id="@+id/rbLogout"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
@@ -101,12 +106,13 @@
         android:layout_height="48dp"
         android:layout_gravity="bottom"
         android:orientation="horizontal"
-        android:background="#80000000"
+        android:background="#000000"
         android:padding="4dp" >
 
         <RadioButton
             android:id="@+id/rbNormal"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
@@ -122,7 +128,8 @@
 
         <RadioButton
             android:id="@+id/rbHybrid"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
@@ -138,7 +145,8 @@
 
         <RadioButton
             android:id="@+id/rbSatellite"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
@@ -154,7 +162,8 @@
 
         <RadioButton
             android:id="@+id/rbTerrain"
-            android:textColor="#FF0000"
+            android:buttonTint="#FFFFFF"
+            android:textColor="#FFFFFF"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textSize="10dp"
