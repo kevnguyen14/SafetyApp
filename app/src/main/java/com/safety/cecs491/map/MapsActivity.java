@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -76,11 +77,10 @@ public class MapsActivity extends FragmentActivity{
         rbView.toggle();
         rbRefresh = (RadioButton) findViewById(R.id.rbRefresh);
         rbNormal = (RadioButton) findViewById(R.id.rbNormal);
-        rbNormal.toggle();
         rbHybrid = (RadioButton) findViewById(R.id.rbHybrid);
         rbSatellite = (RadioButton) findViewById(R.id.rbSatellite);
         rbTerrain = (RadioButton) findViewById(R.id.rbTerrain);
-
+        rbTerrain.toggle();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         userLocalStore = new UserLocalStore(this);
         loadPings();
@@ -217,11 +217,16 @@ public class MapsActivity extends FragmentActivity{
                 tv.setText("\nDescribe the danger:");
                 layout.addView(tv);
                 final EditText etDetails = new EditText(context);
-                etDetails.setSingleLine(false);
+                etDetails.setSingleLine(true);
+                etDetails.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 layout.addView(etDetails);
+                TextView tv2 = new TextView(context);
+                tv2.setText("\nRate the danger:");
+                layout.addView(tv2);
                 final NumberPicker rbLevel = new NumberPicker(context);
                 rbLevel.setMinValue(1);
                 rbLevel.setMaxValue(3);
+                rbLevel.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
                 layout.addView(rbLevel);
                 dialogBuilder.setView(layout);
                 dialogBuilder.setPositiveButton("Ping", new DialogInterface.OnClickListener() {
@@ -269,6 +274,7 @@ public class MapsActivity extends FragmentActivity{
         LatLng danger = new LatLng(33.783743, -118.113929);
         //mMap.addMarker(new MarkerOptions().position(danger).title("Danger " + currentDateTime));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(danger, 14.9f));
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
     }
 
     private boolean authenticate() {
