@@ -57,6 +57,11 @@
             android:name=".MapsActivity2"
             android:label="@string/title_activity_maps2" >
         </activity>
+        <activity
+            android:name=".EmergencyContacts"
+            android:label="@string/title_activity_emergency_contacts"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

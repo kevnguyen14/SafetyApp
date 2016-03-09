@@ -102,6 +102,7 @@ public class MapsActivity extends FragmentActivity{
             @Override
             public void onClick(View v) {
                 removeListener();
+                startActivity(new Intent(MapsActivity.this, EmergencyContacts.class));
             }
         });
 
@@ -218,7 +219,6 @@ public class MapsActivity extends FragmentActivity{
                 layout.addView(tv);
                 final EditText etDetails = new EditText(context);
                 etDetails.setSingleLine(true);
-                etDetails.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 layout.addView(etDetails);
                 TextView tv2 = new TextView(context);
                 tv2.setText("\nRate the danger:");
