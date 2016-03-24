@@ -1,10 +1,14 @@
 package com.safety.cecs491.map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,18 +16,26 @@ import android.hardware.SensorManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageSwitcher;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RatingBar;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -62,6 +74,7 @@ public class MapsActivity extends FragmentActivity{
     UserLocalStore userLocalStore;
     String insertPing = "http://cecs491a.comlu.com/insertPing.php";
     String showPing = "http://cecs491a.comlu.com/showPings.php";
+    int pingCounts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +88,13 @@ public class MapsActivity extends FragmentActivity{
         rbView.toggle();
         rbRefresh = (RadioButton) findViewById(R.id.rbRefresh);
         rbNormal = (RadioButton) findViewById(R.id.rbNormal);
-        rbNormal.toggle();
         rbHybrid = (RadioButton) findViewById(R.id.rbHybrid);
         rbSatellite = (RadioButton) findViewById(R.id.rbSatellite);
         rbTerrain = (RadioButton) findViewById(R.id.rbTerrain);
-
+        rbTerrain.toggle();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         userLocalStore = new UserLocalStore(this);
         loadPings();
-
         /**
          * Listener for view
          */
@@ -101,6 +112,7 @@ public class MapsActivity extends FragmentActivity{
             @Override
             public void onClick(View v) {
                 removeListener();
+                startActivity(new Intent(MapsActivity.this, EmergencyContacts.class));
             }
         });
 
@@ -216,11 +228,18 @@ public class MapsActivity extends FragmentActivity{
                 tv.setText("\nDescribe the danger:");
                 layout.addView(tv);
                 final EditText etDetails = new EditText(context);
-                etDetails.setSingleLine(false);
+                etDetails.setSingleLine(true);
                 layout.addView(etDetails);
+                TextView tv2 = new TextView(context);
+                tv2.setText("\nChoose what type of danger:");
+                layout.addView(tv2);
                 final NumberPicker rbLevel = new NumberPicker(context);
                 rbLevel.setMinValue(1);
-                rbLevel.setMaxValue(5);
+                rbLevel.setMaxValue(7);
+                String dangers[] = {"Misc", "Fire", "Kidnapping", "Shooting", "Fight", "Biohazard", "Crash"};
+                rbLevel.setDisplayedValues(dangers);
+                rbLevel.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                rbLevel.setWrapSelectorWheel(false);
                 layout.addView(rbLevel);
                 dialogBuilder.setView(layout);
                 dialogBuilder.setPositiveButton("Ping", new DialogInterface.OnClickListener() {
@@ -247,20 +266,28 @@ public class MapsActivity extends FragmentActivity{
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(position);
         switch (level) {
-            case 1: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+            case 1:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.misc));
                 break;
-            case 2: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+            case 2:
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.fire));
                 break;
-            case 3: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            case 3:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ninja));
                 break;
-            case 4: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            case 4:
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.shooting));
                 break;
-            default:
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            case 5:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.fight));
+                break;
+            case 6:
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.biohazard));
+                break;
+            case 7:
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.crash));
                 break;
         }
         String user = userLocalStore.getLoggedInUser().userName;
-        markerOptions.title(details + " " + currentDateTime + " " + user);
+        markerOptions.title(details + " " + user);
+        markerOptions.snippet(currentDateTime);
         mMap.addMarker(markerOptions);
         storePing(position, details, level, user, currentDateTime);
     }
@@ -271,6 +298,7 @@ public class MapsActivity extends FragmentActivity{
         LatLng danger = new LatLng(33.783743, -118.113929);
         //mMap.addMarker(new MarkerOptions().position(danger).title("Danger " + currentDateTime));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(danger, 14.9f));
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
     }
 
     private boolean authenticate() {
@@ -312,6 +340,7 @@ public class MapsActivity extends FragmentActivity{
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray pings = response.getJSONArray("pings");
+                    pingCounts = pings.length();
                     for (int i = 0; i < pings.length(); i++) {
                         JSONObject ping = pings.getJSONObject(i);
                         String latTemp = ping.getString("lat");
@@ -327,19 +356,27 @@ public class MapsActivity extends FragmentActivity{
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(position);
                         switch (level) {
-                            case 1: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                            case 1:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.misc));
                                 break;
-                            case 2: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                            case 2:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.fire));
                                 break;
-                            case 3: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            case 3:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ninja));
                                 break;
-                            case 4: markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                            case 4:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.shooting));
                                 break;
-                            default:
-                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                            case 5:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.fight));
+                                break;
+                            case 6:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.biohazard));
+                                break;
+                            case 7:
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.crash));
                                 break;
                         }
-                        markerOptions.title(details + " " + currentDateTime + " " + user);
+                        markerOptions.title(details + " -" + user);
+                        markerOptions.snippet(currentDateTime);
                         mMap.addMarker(markerOptions);
                     }
                 }catch (JSONException e) {

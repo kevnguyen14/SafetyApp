@@ -46,7 +46,7 @@ import java.util.Map;
 
 public class Register extends AppCompatActivity{
 
-    Button bRegister;
+    Button bRegister, bBack;
     EditText etFirstName, etLastName, etUsername, etPassword, etConfirmPassword;
     RequestQueue requestQueue;
     String insertUrl = "http://cecs491a.comlu.com/insertUser.php";
@@ -63,13 +63,25 @@ public class Register extends AppCompatActivity{
         etLastName = (EditText) findViewById(R.id.etLastName);
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
         bRegister = (Button) findViewById(R.id.bRegister);
-        //result = (TextView) findViewById(R.id.textView);
+        bBack = (Button) findViewById(R.id.bBack);
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        bBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Register.this, Login.class));
+            }
+        });
 
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = new ProgressDialog(Register.this);
+                progressDialog.setCancelable(false);
+                progressDialog.setTitle("Processing...");
+                progressDialog.setMessage("Please wait...");
+                progressDialog.show();
                 String userName = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
                 String confirmPassword = etConfirmPassword.getText().toString();
@@ -100,11 +112,6 @@ public class Register extends AppCompatActivity{
                         }
                     };
                     requestQueue.add(request);
-                    progressDialog = new ProgressDialog(Register.this);
-                    progressDialog.setCancelable(false);
-                    progressDialog.setTitle("Processing...");
-                    progressDialog.setMessage("Please wait...");
-                    progressDialog.show();
                     Intent loginIntent = new Intent(Register.this, Login.class);
                     startActivity(loginIntent);
                 }
