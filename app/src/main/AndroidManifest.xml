@@ -27,7 +27,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBY7Jnvu1R8XuQz2W51pIgmXU1dkvq4slk" />
+            android:value="AIzaSyBJaqwAe7kzuurA_H6gbWlcZk_ZB3GVNRM" />
 
         <activity
             android:name=".MapsActivity"
@@ -46,7 +46,6 @@
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login" >
-            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name=".Register2"
@@ -56,6 +55,10 @@
         <activity
             android:name=".MapsActivity2"
             android:label="@string/title_activity_maps2" >
+        </activity>
+        <activity
+            android:name=".EmergencyContacts"
+            android:label="@string/title_activity_emergency_contacts" >
         </activity>
     </application>
 

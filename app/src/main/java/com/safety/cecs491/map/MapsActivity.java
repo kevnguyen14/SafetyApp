@@ -286,7 +286,7 @@ public class MapsActivity extends FragmentActivity{
                 break;
         }
         String user = userLocalStore.getLoggedInUser().userName;
-        markerOptions.title(details + " " + user);
+        markerOptions.title(details + " -" + user);
         markerOptions.snippet(currentDateTime);
         mMap.addMarker(markerOptions);
         storePing(position, details, level, user, currentDateTime);

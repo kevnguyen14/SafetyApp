@@ -63,7 +63,7 @@ public class Register2 extends AppCompatActivity implements View.OnClickListener
     }
 */
 
-    Button bRegister;
+    Button bRegister, bBack;
     EditText etFirstName, etLastName, etUsername, etPassword, etConfirmPassword, etAdminKey;
     RequestQueue requestQueue;
     String insertUrl = "http://cecs491a.comlu.com/insertAdmin.php";
@@ -83,10 +83,18 @@ public class Register2 extends AppCompatActivity implements View.OnClickListener
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
         etAdminKey = (EditText) findViewById(R.id.etAdminKey);
         bRegister = (Button) findViewById(R.id.bRegister);
+        bBack = (Button) findViewById(R.id.bBack);
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         adminLocalStore = new AdminLocalStore(this);
+
+        bBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Register2.this, Login.class));
+            }
+        });
 
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
