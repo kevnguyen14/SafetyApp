@@ -35,6 +35,7 @@ import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.android.volley.AuthFailureError;
@@ -289,6 +290,9 @@ public class MapsActivity extends FragmentActivity{
         markerOptions.title(details + " -" + user);
         markerOptions.snippet(currentDateTime);
         mMap.addMarker(markerOptions);
+        Toast.makeText(getApplicationContext()
+                , "You have completed a Ping!"
+                , Toast.LENGTH_SHORT).show();
         storePing(position, details, level, user, currentDateTime);
     }
     private void setUpMap() {

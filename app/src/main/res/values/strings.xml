@@ -8,4 +8,5 @@
     <string name="title_activity_maps2">Map</string>
     <string name="title_activity_ping_event">PingEvent</string>
     <string name="title_activity_emergency_contacts">EmergencyContacts</string>
+    <string name="title_activity_search_ping">SearchPing</string>
 </resources>

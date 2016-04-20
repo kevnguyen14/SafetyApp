@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:weightSum="1">
 
     <TextView
         android:id="@+id/tvUsername"
@@ -45,6 +46,23 @@
         android:id="@+id/bNewAdmin"
         android:text="New Admin Register"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:id="@+id/text1"
+        style="?android:attr/spinnerDropDownItemStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:text="Check box if you are an Admin."
+        android:layout_gravity="center"
+        android:singleLine="true" />
+
+    <CheckBox
+        android:id="@+id/cbCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

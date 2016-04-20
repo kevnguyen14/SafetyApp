@@ -31,8 +31,8 @@ public class AdminLocalStore {
         String userName = adminLocalDatabase.getString("userName", "");
         String password = adminLocalDatabase.getString("password", "");
 
-        Admin storedadmin = new Admin(firstName, lastName, userName, password);
-        return storedadmin;
+        Admin storedAdmin = new Admin(firstName, lastName, userName, password);
+        return storedAdmin;
     }
 
     public void setAdminLoggedIn(boolean loggedIn) {
