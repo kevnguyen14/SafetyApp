@@ -13,9 +13,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -266,24 +268,32 @@ public class MapsActivity extends FragmentActivity{
         String currentDateTime = date.format(new Date());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(position);
+        String levelType = null;
         switch (level) {
             case 1:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.misc));
+                levelType = "Miscellaneous";
                 break;
             case 2:
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.fire));
+                levelType = "Fire";
                 break;
             case 3:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ninja));
+                levelType = "Kidnapping";
                 break;
             case 4:
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.shooting));
+                levelType = "Shooting";
                 break;
             case 5:markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.fight));
+                levelType = "Fight";
                 break;
             case 6:
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.biohazard));
+                levelType = "Biohazard";
                 break;
             case 7:
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.crash));
+                levelType = "Crash";
                 break;
         }
         String user = userLocalStore.getLoggedInUser().userName;
@@ -294,7 +304,26 @@ public class MapsActivity extends FragmentActivity{
                 , "You have completed a Ping!"
                 , Toast.LENGTH_SHORT).show();
         storePing(position, details, level, user, currentDateTime);
+        textAdmin(position, details, levelType, user, currentDateTime);
     }
+
+    private void textAdmin(LatLng position, String details, String level, String user, String currentDateTime) {
+        Log.i("Send SMS", "");
+        String phoneNo = "4086678918";
+        String message = "User: " + user + "\n\n" + details + "\n\n" + level + " at " + position.toString() + ". \n\n" + currentDateTime +".";
+
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, message, null, null);
+//            Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
+        }
+
+        catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
     private void setUpMap() {
         SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
         String currentDateTime = date.format(new Date());
