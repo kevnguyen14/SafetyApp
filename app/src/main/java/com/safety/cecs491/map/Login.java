@@ -4,11 +4,13 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -130,11 +132,15 @@ public class Login extends AppCompatActivity {
     private void startMap() {
         Intent loginIntent = new Intent(Login.this, MapsActivity.class);
         startActivity(loginIntent);
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.welcome);
+        mp.start();
     }
 
     private void startMap2() {
         Intent loginIntent = new Intent(Login.this, MapsActivity2.class);
         startActivity(loginIntent);
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.welcome);
+        mp.start();
     }
 
     private void logUserIn(User returnedUser) {

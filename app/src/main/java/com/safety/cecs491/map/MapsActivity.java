@@ -14,6 +14,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -143,6 +144,8 @@ public class MapsActivity extends FragmentActivity{
                 userLocalStore.clearUserData();
                 userLocalStore.setUserLoggedIn(false);
                 startActivity(new Intent(MapsActivity.this, Login.class));
+                MediaPlayer mp = MediaPlayer.create(MapsActivity.this, R.raw.goodbye);
+                mp.start();
             }
         });
 
@@ -400,6 +403,8 @@ public class MapsActivity extends FragmentActivity{
         markerOptions.title(details + " -" + user);
         markerOptions.snippet(currentDateTime);
         mMap.addMarker(markerOptions);
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.ding);
+        mp.start();
         Toast.makeText(getApplicationContext()
                 , "You have completed a Ping!"
                 , Toast.LENGTH_SHORT).show();

@@ -13,6 +13,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -72,13 +73,11 @@ public class MapsActivity2 extends FragmentActivity {
 
     private GoogleMap mMap;
     RequestQueue requestQueue;
-    ProgressDialog progressDialog;
     RadioButton rbRemovePing, rbLogout, rbView, rbRefresh;
     RadioButton rbNormal, rbSatellite, rbHybrid, rbTerrain;
     AdminLocalStore adminLocalStore;
     String showPing = "http://cecs491a.comlu.com/showPings.php";
     String removePings = "http://cecs491a.comlu.com/deletePing.php";
-//    ArrayList <Marker> markers = new ArrayList<Marker>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +125,8 @@ public class MapsActivity2 extends FragmentActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 marker.remove();
+                                MediaPlayer mp = MediaPlayer.create(MapsActivity2.this, R.raw.poof);
+                                mp.start();
                                 removePing(marker.getPosition());
                                 Toast.makeText(getApplicationContext()
                                         , "Removed Ping "
@@ -162,6 +163,8 @@ public class MapsActivity2 extends FragmentActivity {
                 adminLocalStore.clearAdminData();
                 adminLocalStore.setAdminLoggedIn(false);
                 startActivity(new Intent(MapsActivity2.this, Login.class));
+                MediaPlayer mp = MediaPlayer.create(MapsActivity2.this, R.raw.goodbye);
+                mp.start();
             }
         });
 
@@ -236,8 +239,6 @@ public class MapsActivity2 extends FragmentActivity {
     }
 
     private void setUpMap() {
-        SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
-        String currentDateTime = date.format(new Date());
         // Add a marker to a location
         LatLng danger = new LatLng(33.783743, -118.113929);
         //mMap.addMarker(new MarkerOptions().position(danger).title("Danger " + currentDateTime));
@@ -293,8 +294,7 @@ public class MapsActivity2 extends FragmentActivity {
                         }
                         markerOptions.title(details + " -" + user);
                         markerOptions.snippet(currentDateTime);
-                        Marker marker = mMap.addMarker(markerOptions);
-//                        markers.add(marker);
+                        mMap.addMarker(markerOptions);
                     }
                 }catch (JSONException e) {
                     e.printStackTrace();
