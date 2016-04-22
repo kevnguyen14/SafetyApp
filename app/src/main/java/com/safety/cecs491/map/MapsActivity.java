@@ -225,7 +225,7 @@ public class MapsActivity extends FragmentActivity{
             @Override
             public void onMapClick(final LatLng position) {
                 Toast.makeText(getApplicationContext()
-                        , "Scroll down for Key list"
+                        , "Scroll down to select and rate danger."
                         , Toast.LENGTH_SHORT).show();
                 Context context = MapsActivity.this;
                 ScrollView scrollView = new ScrollView(context);
@@ -241,32 +241,6 @@ public class MapsActivity extends FragmentActivity{
                 final EditText etDetails = new EditText(context);
                 etDetails.setSingleLine(true);
                 layout.addView(etDetails);
-
-                TextView tv2 = new TextView(context);
-                tv2.setText("\nSelect danger:");
-                tv2.setTypeface(null, Typeface.BOLD);
-                layout.addView(tv2);
-                final NumberPicker rbLevel = new NumberPicker(context);
-                rbLevel.setMinValue(1);
-                rbLevel.setMaxValue(7);
-                String dangers[] = {"Misc", "Fire", "Kidnapping", "Shooting", "Fight", "Biohazard", "Crash"};
-                rbLevel.setDisplayedValues(dangers);
-                rbLevel.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-                rbLevel.setWrapSelectorWheel(false);
-                layout.addView(rbLevel);
-
-                TextView tv3 = new TextView(context);
-                tv3.setText("\nRate danger: (1 Lowest, 2 Moderate, 3 Highest)");
-                tv3.setTypeface(null, Typeface.BOLD);
-                layout.addView(tv3);
-                final NumberPicker rbLevel2 = new NumberPicker(context);
-                rbLevel2.setMinValue(1);
-                rbLevel2.setMaxValue(3);
-                String ratings[] = {"1 - Yellow", "2 - Orange", "3 - Red"};
-                rbLevel2.setDisplayedValues(ratings);
-                rbLevel2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-                rbLevel2.setWrapSelectorWheel(false);
-                layout.addView(rbLevel2);
 
                 TextView danger = new TextView(context);
                 danger.setText("\nDanger Key:");
@@ -300,6 +274,33 @@ public class MapsActivity extends FragmentActivity{
                 crash.setText("\nCrash: ");
                 crash.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.crashdefault, 0);
                 layout.addView(crash);
+
+                TextView tv2 = new TextView(context);
+                tv2.setText("\nSelect danger:");
+                tv2.setTypeface(null, Typeface.BOLD);
+                layout.addView(tv2);
+                final NumberPicker rbLevel = new NumberPicker(context);
+                rbLevel.setMinValue(1);
+                rbLevel.setMaxValue(7);
+                String dangers[] = {"Misc", "Fire", "Kidnapping", "Shooting", "Fight", "Biohazard", "Crash"};
+                rbLevel.setDisplayedValues(dangers);
+                rbLevel.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                rbLevel.setWrapSelectorWheel(false);
+                layout.addView(rbLevel);
+
+                TextView tv3 = new TextView(context);
+                tv3.setText("\nRate danger: (1 Lowest, 2 Moderate, 3 Highest)");
+                tv3.setTypeface(null, Typeface.BOLD);
+                layout.addView(tv3);
+                final NumberPicker rbLevel2 = new NumberPicker(context);
+                rbLevel2.setMinValue(1);
+                rbLevel2.setMaxValue(3);
+                String ratings[] = {"1 - Yellow", "2 - Orange", "3 - Red"};
+                rbLevel2.setDisplayedValues(ratings);
+                rbLevel2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+                rbLevel2.setWrapSelectorWheel(false);
+                layout.addView(rbLevel2);
+
                 scrollView.addView(layout);
                 dialogBuilder.setView(scrollView);
                 dialogBuilder.setPositiveButton("Ping", new DialogInterface.OnClickListener() {
@@ -406,7 +407,7 @@ public class MapsActivity extends FragmentActivity{
     private void textAdmin(LatLng position, String details, String level, String user, String currentDateTime, int rating) {
         Log.i("Send SMS", "");
         String phoneNo []= {"3106342798"};
-        String message = "User: " + user + "\n\n" + details + "\n\n" + level + " level " + rating + "severity at " + position.toString() + ". \n\n" + currentDateTime +".";
+        String message = "User: " + user + "\n\n" + details + "\n\n" + level + " level " + rating + " severity at " + position.toString() + ". \n\n" + currentDateTime +".";
 
         try {
             SmsManager smsManager = SmsManager.getDefault();
