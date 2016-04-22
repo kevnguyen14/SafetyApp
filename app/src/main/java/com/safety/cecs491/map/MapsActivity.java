@@ -73,12 +73,12 @@ public class MapsActivity extends FragmentActivity{
 
     private GoogleMap mMap;
     RequestQueue requestQueue;
-    ProgressDialog progressDialog;
     RadioButton rbPing, rbSettings, rbLogout, rbView, rbRefresh;
     RadioButton rbNormal, rbSatellite, rbHybrid, rbTerrain;
     UserLocalStore userLocalStore;
     String insertPing = "http://cecs491a.comlu.com/insertPing.php";
     String showPing = "http://cecs491a.comlu.com/showPings.php";
+    String timedPing = "http://cecs491a.comlu.com/timedPing.php";
     int pingCounts;
 
     @Override
@@ -128,6 +128,7 @@ public class MapsActivity extends FragmentActivity{
             @Override
             public void onClick(View v) {
                 removeListener();
+                expirePings();
                 loadPings();
             }
         });
@@ -206,6 +207,8 @@ public class MapsActivity extends FragmentActivity{
     public void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+        expirePings();
+        loadPings();
     }
 
     public void setUpMapIfNeeded() {
@@ -423,8 +426,6 @@ public class MapsActivity extends FragmentActivity{
     }
 
     private void setUpMap() {
-        SimpleDateFormat date = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
-        String currentDateTime = date.format(new Date());
         // Add a marker to a location
         LatLng danger = new LatLng(33.783743, -118.113929);
         //mMap.addMarker(new MarkerOptions().position(danger).title("Danger " + currentDateTime));
@@ -563,5 +564,21 @@ public class MapsActivity extends FragmentActivity{
         });
         requestQueue.add(jsonObjectRequest);
 
+    }
+
+    private void expirePings() {
+        StringRequest request = new StringRequest(Request.Method.POST, timedPing, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                // Do something with the response
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error
+            }
+        }) {
+        };
+        requestQueue.add(request);
     }
 }
